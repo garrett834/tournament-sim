@@ -131,5 +131,13 @@ public class TournamentServer
 	    tournaments.remove(tourneyIndex);
 	    return "Tournament at index" + tourneyIndex + " removed.";
 	}
+	
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/reset")
+	public String reset() 
+	{
+	    tournaments.clear();
+	    return "reset";
+	}
 
 }

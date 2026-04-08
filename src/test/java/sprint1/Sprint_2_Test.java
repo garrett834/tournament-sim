@@ -1,151 +1,230 @@
 package sprint1;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-class Sprint_2_Test 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+ 
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
+                classes = SpringBootServer.class) 
+class Sprint_2_Test
 {
-	TournamentServer server; 
-
-    @BeforeEach
-    public void setup()
-    {
-        server = new TournamentServer();
-    }
-
+	//using TestRestTemplate cause I have spring 3.2 and RestTestClient needs 4.
+    @Autowired
+    private TestRestTemplate restTemplate;
     
-    @Test
-    public void testViewTournamentsEmpty()
+    //reset server state before each test cause i was getting inconsistent results
+    @BeforeEach
+    void reset()
     {
-        String result = server.viewTournaments();
-        //new tournament array should be empty
+        restTemplate.getForObject("/reset", String.class);
+    }
+    //new server starts with empty tournament list
+    @Test
+    void testViewTournamentsEmpty()
+    {
+        String result = restTemplate.getForObject("/tournaments", String.class);
         assertEquals("Tournaments: []", result);
     }
-
+    //test creation of tournament
     @Test
-    public void testCreateTournament()
+    void testCreateTournament()
     {
-        server.addTournament();
-        //adding tournament should show in array
-        assertEquals(1, server.tournaments.size());
+        String result = restTemplate.getForObject("/add/tournament", String.class);
+        assertTrue(result.contains("Tournament created at index"));
     }
-
+    //make sure tournament in array after adding
     @Test
-    public void testViewTournamentsAfterCreate()
+    void testViewTournamentsAfterCreate()
     {
-        server.addTournament();
-        String result = server.viewTournaments();
+        restTemplate.getForObject("/add/tournament", String.class);
+
+        String result = restTemplate.getForObject("/tournaments", String.class);
         assertTrue(result.contains("RoundRobin"));
     }
-
     @Test
-    public void testRemoveTournament()
+    void testRemoveTournament()
     {
-        server.addTournament();
-        server.removeTournament(0);
-        assertEquals(0, server.tournaments.size());
+        restTemplate.getForObject("/add/tournament", String.class);
+
+        String result = restTemplate.getForObject("/remove/0", String.class);
+        assertTrue(result.contains("removed"));
     }
-
+    //test error handling for bad index given
     @Test
-    public void testRemoveTournamentInvalidIndex()
+    void testRemoveTournamentInvalidIndex()
     {
-        String result = server.removeTournament(0);
+        String result = restTemplate.getForObject("/remove/0", String.class);
         assertEquals("Not a valid tournament index", result);
     }
-
+    //check registering remote robot
     @Test
-    public void testRegisterRemoteRobot()
+    void testRegisterRemoteRobot()
     {
-        server.addTournament();
-        String result = server.registerRemoteRobot("Gary", "localhost", "8081", 0);
+        restTemplate.getForObject("/add/tournament", String.class);
+
+        String result = restTemplate.getForObject("/register/robot/Gary/localhost/8081/0", String.class);
         assertTrue(result.contains("Gary"));
-        assertEquals(1, server.clients.size());
     }
-
+    //test error for registering remote to out of index tournament
     @Test
-    public void testRegisterRemoteRobotInvalidIndex()
+    void testRegisterRemoteRobotInvalidIndex()
     {
-        String result = server.registerRemoteRobot("Gary", "localhost", "8081", 50);
+        String result = restTemplate.getForObject("/register/robot/Gary/localhost/8081/50", String.class);
         assertEquals("Not a valid tournament index", result);
     }
-
+    //make sure same robot doesn't enter tournament twice
     @Test
-    public void testRegisterRemoteRobotDuplicate()
+    void testRegisterRemoteRobotDuplicate()
     {
-        server.addTournament();
-        server.registerRemoteRobot("Gary", "localhost", "8081", 0);
-        String result = server.registerRemoteRobot("Gary", "localhost", "8081", 0);
+        restTemplate.getForObject("/add/tournament", String.class);
+        restTemplate.getForObject("/register/robot/Gary/localhost/8081/0", String.class);
+
+        String result = restTemplate.getForObject("/register/robot/Gary/localhost/8081/0", String.class);
         assertTrue(result.contains("already registered"));
     }
-
     @Test
-    public void testRegisterHumanRobot()
+    void testRegisterHumanRobot()
     {
-        server.addTournament();
-        String result = server.registerHumanRobot("Gary", 0);
+        restTemplate.getForObject("/add/tournament", String.class);
+
+        String result = restTemplate.getForObject("/register/human/Gary/0", String.class);
         assertTrue(result.contains("Gary"));
     }
-
     @Test
-    public void testRegisterHumanRobotInvalidIndex()
+    void testRegisterHumanRobotInvalidIndex()
     {
-        String result = server.registerHumanRobot("Gary", 99);
+        String result = restTemplate.getForObject("/register/human/Gary/99", String.class);
         assertEquals("Not a valid tournament index", result);
     }
-
+    //test start tournament runs full torunament and gives a winner
     @Test
-    public void testStartTournament()
+    void testStartTournament()
     {
-        server.addTournament();
-        String result = server.startTournament(0);
+        restTemplate.getForObject("/add/tournament", String.class);
+        String result = restTemplate.getForObject("/start/0", String.class);
         assertTrue(result.contains("winner"));
     }
-
+    //start invalid index should error message
     @Test
-    public void testStartTournamentInvalidIndex()
+    void testStartTournamentInvalidIndex()
     {
-        String result = server.startTournament(99);
+        String result = restTemplate.getForObject("/start/99", String.class);
         assertEquals("Not a valid tournament index", result);
     }
-
-
+    //make sure RemoteClientBot data is correct
     @Test
-    public void testRemoteClientRobot()
+    void testRemoteClientRobot()
     {
         RemoteClientRobot robot = new RemoteClientRobot("Gary", "localhost", "8081");
-        //shoudl store name, ip, and port
         assertEquals("Gary", robot.name);
         assertEquals("localhost", robot.getIp());
         assertEquals("8081", robot.getPort());
     }
-
+    //default to cooperate if connection is lost
     @Test
-    public void testRemoteClientRobotFallback()
+    void testRemoteClientRobotFallback()
     {
-        //no client running so should fallback to cooperate
         RemoteClientRobot robot = new RemoteClientRobot("Gary", "localhost", "9999");
         assertEquals("Cooperate", robot.makeDecision());
     }
-    
     @Test
-    public void testRemoteClientRobotWithPrevDecision()
+    void testRemoteClientRobotWithPrevDecision()
     {
         RemoteClientRobot robot = new RemoteClientRobot("Gary", "localhost", "9999");
         robot.opponentsPrevDecision = "Cooperate";
-        // no client on 9999 so falls back to cooperate
         assertEquals("Cooperate", robot.makeDecision());
     }
-    
+    //null prev. decision should fall back to cooperate
     @Test
-    public void testRemoteClientRobotNullPrevDecision()
+    void testRemoteClientRobotNullPrevDecision()
     {
         RemoteClientRobot robot = new RemoteClientRobot("Garrett", "localhost", "9999");
         robot.opponentsPrevDecision = null;
-        // no client running on 9999 so falls back to cooperate
         assertEquals("Cooperate", robot.makeDecision());
     }
-    
+    //test correct decision based on prev. decision
+    @Test
+    void testDecisionWithPrevDecision() {
+        String decision = restTemplate.getForObject("/decision/Defect", String.class);
+        // OnlyDefectRobot should always defect
+        assertEquals("Defect", decision);
+    }
+    //handling of invalid prev. decision input
+    @Test
+    void testDecisionWithInvalidPrevDecision() {
+        String decision = restTemplate.getForObject("/decision/invalid", String.class);
+        assertEquals("Defect", decision);
+    }
+    //test human entering defect w/ System.setIn
+    @Test
+    void testHumanRobotDefectDecision() {
+        //simulate user typing "Defect"
+        String input = "Defect\n";
+        //ByteArrayInputStream converts text into bytes java can read
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        //System.setIn tells java to look at in variable instead of user input for testing
+        System.setIn(in);
 
+        HumanRobot human = new HumanRobot("Test");
+        String decision = human.makeDecision();
+        assertEquals("Defect", decision);
+    }
+    //should defect to cooperate when given gibberish
+    @Test
+    void testHumanRobotInvalidDecision() {
+        String input = "hjgjhuy\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        HumanRobot human = new HumanRobot("Tester");
+        String decision = human.makeDecision();
+
+        assertEquals("Cooperate", decision);
+    }
+    //for opponents prev. decision != null
+    @Test
+    void testHumanRobotWithPreviousDecision() {
+        //human typing "Cooperate"
+        String simulatedInput = "Cooperate\n";
+        InputStream in = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(in);
+
+        HumanRobot human = new HumanRobot("Test");
+        //set prev. decision to defect
+        human.opponentsPrevDecision = "Defect";
+
+        String decision = human.makeDecision();
+        assertEquals("Cooperate", decision);
+        assertEquals("Defect", human.opponentsPrevDecision);
+    }
+    //test root page html
+    @Test
+    void testRootHtml() {
+        String result = restTemplate.getForObject("/", String.class);
+
+        String expected = 
+            "<html>" +
+            "<body>" +
+            "<h1>Tournament Server</h1>" +
+            "<ol>" +
+            "<li> <a href='/tournaments'>/tournaments </a> - List of all available tournaments. </li>" +
+            "<li>/register/robot/{name}/{ip}/{port}/{tourneyIndex} - Add robot to a tournament.</li>" +
+            "<li>/add/tournament - Create a new round robin tournament. </li>" +
+            "<li>/remove/{tourneyIndex} - Remove tournament.</li>" +
+            "<li>/register/human/{name}/{tourneyIndex} - Add human to a tournament.</li>" +
+            "<li>/start/{tourneyIndex} - Start tournament.</li>" +
+            "</ol>" +
+            "</body>" +
+            "</html>";
+
+        assertEquals(expected, result);
+    }
 }
+	
