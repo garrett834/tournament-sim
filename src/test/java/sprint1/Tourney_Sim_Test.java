@@ -69,13 +69,16 @@ class Tourney_Sim_Test
 		t1.game = g1;
 		
 		Robot tournamentWinner = t1.runTournament();
+		//System.out.println("p1 record: " + p1.record);
+		//System.out.println("p2 record: " + p2.record);
+		//System.out.println("p3 record: " + p3.record);
 		assertEquals(p1,tournamentWinner);
 		//joe the only defect robot won both games
 		assertEquals(2,p1.record);
 		//opposite robot lost one game and tied the other
-		assertEquals(-1,p2.record);
+		assertEquals(0,p2.record);
 		//same robot lost one game and tied the other
-		assertEquals(-1,p3.record);
+		assertEquals(-2,p3.record);
 	}
 	
 	 @Test
@@ -234,15 +237,31 @@ class Tourney_Sim_Test
 	    }
 	    
 	    @Test
+	    void testMoveLoggingException()
+	    {
+	        MoveLoggingSystem logger = new MoveLoggingSystem();
+	        logger.move_file_path = "/hgjhgjh/move_file.txt";
+	        assertDoesNotThrow(() -> logger.updateMove("test"));
+	    }
+	    
+	    @Test
+	    void testScoreLoggingIOException()
+	    {
+	        ScoreLoggingSystem logger = new ScoreLoggingSystem();
+	        logger.score_file_path = "/jhgjhg/scores_file.txt";
+	        assertDoesNotThrow(() -> logger.updateScore("test"));
+	    }
+	    
+	    @Test
 	    void testSameRobot()
 	    {
 	    	//no previous decision
 	        assertEquals("Cooperate", p3.makeDecision());
 	        
-	        p3.oppsPrevDecision = "Cooperate";
+	        p3.opponentsPrevDecision = "Cooperate";
 	        assertEquals("Cooperate", p3.makeDecision());
 	        
-	        p3.oppsPrevDecision = "Defect";
+	        p3.opponentsPrevDecision = "Defect";
 
 	        assertEquals("Defect", p3.makeDecision());
 	    }
@@ -253,10 +272,10 @@ class Tourney_Sim_Test
 	    	//no previous decision
 	        assertEquals("Cooperate", p2.makeDecision());
 	        
-	        p2.oppsPrevDecision = "Cooperate";
+	        p2.opponentsPrevDecision = "Cooperate";
 	        assertEquals("Defect", p2.makeDecision());
 	        
-	        p2.oppsPrevDecision = "Defect";
+	        p2.opponentsPrevDecision = "Defect";
 
 	        assertEquals("Cooperate", p2.makeDecision());
 	        

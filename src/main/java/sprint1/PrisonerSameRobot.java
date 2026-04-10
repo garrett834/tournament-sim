@@ -2,7 +2,7 @@ package sprint1;
 //choose same as opponents previous decision
 public class PrisonerSameRobot extends Robot
 {
-	String oppsPrevDecision;
+	//String oppsPrevDecision;
 	public PrisonerSameRobot(String name, int score, int record) 
 	{
 		super(name, score, record);
@@ -11,11 +11,11 @@ public class PrisonerSameRobot extends Robot
 	@Override
 	public String makeDecision() 
 	{
-		if(this.oppsPrevDecision == null) 
+		if(this.opponentsPrevDecision == null) 
 		{
 			return "Cooperate";
 		}
-		if(this.oppsPrevDecision.equals("Defect"))
+		if(this.opponentsPrevDecision.equals("Defect"))
 		{
 			return "Defect";
 		}

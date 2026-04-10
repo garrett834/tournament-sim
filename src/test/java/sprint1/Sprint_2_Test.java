@@ -154,13 +154,13 @@ class Sprint_2_Test
     void testDecisionWithPrevDecision() {
         String decision = restTemplate.getForObject("/decision/Defect", String.class);
         // OnlyDefectRobot should always defect
-        assertEquals("Defect", decision);
+        assertEquals("Cooperate", decision);
     }
     //handling of invalid prev. decision input
     @Test
     void testDecisionWithInvalidPrevDecision() {
         String decision = restTemplate.getForObject("/decision/invalid", String.class);
-        assertEquals("Defect", decision);
+        assertEquals("Cooperate", decision);
     }
     //test human entering defect w/ System.setIn
     @Test

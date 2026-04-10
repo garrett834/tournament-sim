@@ -14,12 +14,30 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @RestController
 public class TournamentClient 
 {
-	Robot clientBot = new OnlyDefectRobot("ClientBot",0,0);
+	Robot clientBot;
+
+    public TournamentClient()
+    {
+        this.clientBot = new PrisonerOppositeRobot("ClientBot", 0, 0);
+    }
+
+    public TournamentClient(Robot bot)
+    {
+        this.clientBot = bot;
+    }
 	
 	public static void main(String[] args)
     {
         System.setProperty("server.port", "8081");
         SpringApplication.run(TournamentClient.class, args);
+    }
+	
+	@ResponseStatus(HttpStatus.OK)
+    @GetMapping("/resetClient")
+    public String reset()
+    {
+        clientBot = new PrisonerOppositeRobot("ClientBot", 0, 0);
+        return "Client bot reset";
     }
 	
 	@ResponseStatus(HttpStatus.OK)

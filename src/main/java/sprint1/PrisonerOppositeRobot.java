@@ -2,7 +2,7 @@ package sprint1;
 //choose the opposite of whatever other robot did
 public class PrisonerOppositeRobot extends Robot
 {
-	String oppsPrevDecision;
+	//String oppsPrevDecision;
 	public PrisonerOppositeRobot(String name, int score, int record) 
 	{
 		super(name, score, record);
@@ -11,11 +11,11 @@ public class PrisonerOppositeRobot extends Robot
 	@Override
 	public String makeDecision()
 	{
-		if (this.oppsPrevDecision == null)
+		if (this.opponentsPrevDecision == null)
 		{
 			return "Cooperate";
 		}
-		if (this.oppsPrevDecision.equals("Cooperate"))
+		if (this.opponentsPrevDecision.equals("Cooperate"))
 		{
 			return "Defect";
 		}
