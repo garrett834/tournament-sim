@@ -1,10 +1,14 @@
-package sprint1;
+package sprint2;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import sprint1.PrisonerOppositeRobot;
+import sprint1.Robot;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -14,7 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @RestController
 public class TournamentClient 
 {
-	Robot clientBot;
+	public Robot clientBot;
 
     public TournamentClient()
     {

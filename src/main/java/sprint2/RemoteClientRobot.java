@@ -1,6 +1,8 @@
-package sprint1;
+package sprint2;
 
 import org.springframework.web.client.RestClient;
+
+import sprint1.Robot;
 
 public class RemoteClientRobot extends Robot
 {

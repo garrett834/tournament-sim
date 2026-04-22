@@ -5,6 +5,7 @@ public class RoundRobinTournament extends Tournament
 	@Override
 	public Robot runTournament()
 	{
+		active = true;
 		for(int i=0;i<participants.size();i++)
 		{
 			for(int j=i+1;j<participants.size();j++)
@@ -22,6 +23,7 @@ public class RoundRobinTournament extends Tournament
 				
 			}
 		}
+		active = false;
 		return getWinner();
 	}
 	

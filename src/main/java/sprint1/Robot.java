@@ -2,10 +2,10 @@ package sprint1;
 
 public abstract class Robot 
 {
-	String name;
+	public String name;
 	public int score;
-	int record;
-	String opponentsPrevDecision = null;
+	public int record;
+	public String opponentsPrevDecision = null;
 	
 	public Robot(String name, int score, int record) 
 	{

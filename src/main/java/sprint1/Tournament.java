@@ -4,8 +4,14 @@ import java.util.ArrayList;
 //abstract tournament class w/ arr. of robots & run tourney method 
 public abstract class Tournament 
 {
-	ArrayList<Robot> participants;
-	Game game;
+	public ArrayList<Robot> participants;
+	public Game game;
+	public String name;
+	public boolean active;
+	public boolean isActive()
+	{
+		return active; 
+	}
 
 	public Tournament() 
 	{
@@ -13,5 +19,18 @@ public abstract class Tournament
 	}
 
 	public abstract Robot runTournament();
+
+	@Override
+	public String toString() 
+	{
+		if(active)
+		{
+			return name + " -" + " Active";
+		}
+		else {
+			return name + " -" + " Registration";
+		}
+	    
+	}
 
 }

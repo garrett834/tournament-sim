@@ -1,4 +1,4 @@
-package sprint1;
+package tournamentSimTests;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,6 +7,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import sprint1.MoveLoggingSystem;
+import sprint1.MoveObserver;
+import sprint1.OnlyDefectRobot;
+import sprint1.PrisonerDelimmaGame;
+import sprint1.PrisonerOppositeRobot;
+import sprint1.PrisonerSameRobot;
+import sprint1.Robot;
+import sprint1.RoundRobinTournament;
+import sprint1.ScoreLoggingSystem;
+import sprint1.ScoreObserver;
 
 class Tourney_Sim_Test 
 {
@@ -251,6 +262,8 @@ class Tourney_Sim_Test
 	        logger.score_file_path = "/jhgjhg/scores_file.txt";
 	        assertDoesNotThrow(() -> logger.updateScore("test"));
 	    }
+	    
+	    
 	    
 	    @Test
 	    void testSameRobot()

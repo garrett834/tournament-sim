@@ -1,4 +1,4 @@
-package sprint1;
+package tournamentSimTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+
+import sprint1.OnlyDefectRobot;
+import sprint2.TournamentClient;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
                 classes = TournamentClient.class)

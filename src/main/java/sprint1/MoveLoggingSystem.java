@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class MoveLoggingSystem implements MoveObserver {
 
-	String move_file_path = "move_file.txt";
+	public String move_file_path = "move_file.txt";
 	
 	@Override
 	public void updateMove(String move) 

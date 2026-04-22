@@ -28,6 +28,15 @@ public class PrisonerDelimmaGame extends Game
 			
 			p1.opponentsPrevDecision = movep2;
 			p2.opponentsPrevDecision = movep1;
+			
+
+	        //try {
+				//Thread.sleep(5000);
+			//} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			//}
+	        
 		}
 		notifyScoreObserver(p1.name + " " + "scored" + " " + p1.score);
 		notifyScoreObserver(p2.name + " " + "scored" + " " + p2.score);

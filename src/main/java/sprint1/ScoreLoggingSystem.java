@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class ScoreLoggingSystem implements ScoreObserver {
 
-	String score_file_path = "scores_file.txt";
+	public String score_file_path = "scores_file.txt";
 	
 	@Override
     public void updateScore(String score) 

@@ -1,4 +1,4 @@
-package sprint1;
+package tournamentSimTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+
+import sprint1.HumanRobot;
+import sprint2.RemoteClientRobot;
+import sprint2.SpringBootServer;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
  

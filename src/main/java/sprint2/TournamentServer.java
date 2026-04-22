@@ -1,4 +1,4 @@
-package sprint1;
+package sprint2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +11,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import sprint1.HumanRobot;
+import sprint1.MoveObserver;
+import sprint1.PrisonerDelimmaGame;
+import sprint1.PrisonerOppositeRobot;
+import sprint1.PrisonerSameRobot;
+import sprint1.Robot;
+import sprint1.RoundRobinTournament;
+import sprint1.Tournament;
+import sprint3.RemoteClientViewer;
 
 
 @RestController
@@ -111,6 +121,7 @@ public class TournamentServer
 	public String addTournament()
 	{
 	    RoundRobinTournament rrTourney = new RoundRobinTournament();
+	    rrTourney.name = "RoundRobinTournament" + tournaments.size(); 
 	    rrTourney.game = new PrisonerDelimmaGame();
 	    rrTourney.participants.add(new PrisonerSameRobot("SameBot", 0, 0));
 	    rrTourney.participants.add(new PrisonerOppositeRobot("OppositeBot", 0, 0));
@@ -139,5 +150,51 @@ public class TournamentServer
 	    tournaments.clear();
 	    return "reset";
 	}
+	
+	//creates viewer and adds to its game observers
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/registerViewer/{tourneyIndex}/{ip}/{port}")
+	public String registerViewer(@PathVariable int tourneyIndex,@PathVariable String ip, @PathVariable String port)
+	{
+		if (tourneyIndex >= tournaments.size())
+		{
+			return "Not a valid tournament index";	
+		}
+	        
+
+	    RemoteClientViewer viewer = new RemoteClientViewer(ip, port);
+	    tournaments.get(tourneyIndex).game.registerMoveObserver(viewer);
+	    return "Viewer " + ip + ":" + port + " registered to tournament at index" + tourneyIndex;
+	}
+	
+	//finds viewer w/ ip and port in observer list and removes
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/unregisterViewer/{tourneyIndex}/{ip}/{port}")
+	public String unregisterViewer(@PathVariable int tourneyIndex,@PathVariable String ip, @PathVariable String port)
+	{
+		if (tourneyIndex >= tournaments.size())
+		{
+			 return "Not a valid tournament index";
+		}
+		
+		MoveObserver oneRemoving = null;
+	    for (int i = 0; i < tournaments.get(tourneyIndex).game.MoveObservers.size(); i++)
+	    {
+	        MoveObserver o = tournaments.get(tourneyIndex).game.MoveObservers.get(i);
+	        if (o instanceof RemoteClientViewer viewer && viewer.getIp().equals(ip)&& viewer.getPort().equals(port))
+	        {
+	            oneRemoving = o;
+	            break;
+	        }
+	    }
+
+	    if (oneRemoving != null)
+	    {
+	        tournaments.get(tourneyIndex).game.unregisterMoveObserver(oneRemoving);
+	        return "Viewer " + ip + ":" + port + " unregistered from tournament " + tourneyIndex;
+	    }
+	    return "Viewer with that ip and port not found";
+	}
+				
 
 }
