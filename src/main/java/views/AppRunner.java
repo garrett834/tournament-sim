@@ -11,6 +11,6 @@ public class AppRunner
         System.setProperty("server.port", "8082");
         SpringApplication.run(AppRunner.class, args);
         Main.main(args);
-    }
+    } 
 }
 

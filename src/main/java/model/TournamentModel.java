@@ -10,7 +10,7 @@ import sprint1.Tournament;
 public class TournamentModel 
 {
 	public ObservableList<Tournament> tournaments = FXCollections.observableArrayList();
-	Tournament selectedTournament;
+	public Tournament selectedTournament;
 	String serverIP;
 	String serverPort;
 	String viewerIP;
@@ -53,7 +53,7 @@ public class TournamentModel
             refreshTournament();
             return true;
         }
-		//if can't connect server
+
 		catch (Exception e)
 		{
 			System.out.println("Couldn't connect to server. Error: " + e.getMessage());
@@ -75,7 +75,7 @@ public class TournamentModel
     				.retrieve()
     				.body(String.class);
         }
-		//if can't contact remote viewer client
+
 		catch (Exception e)
 		{
 			System.out.println("Couldn't register viewer. Error: " + e.getMessage());
@@ -120,6 +120,10 @@ public class TournamentModel
             
             //strip bracket and stuff before
             response = response.replace("Tournaments: ","").replace("[", "").replace("]", "");
+            if (response.isEmpty())
+            {
+            	return;
+            }
             String[] parts = response.split(", ");
             for(String part : parts)
             {

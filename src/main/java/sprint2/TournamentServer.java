@@ -195,6 +195,16 @@ public class TournamentServer
 	    }
 	    return "Viewer with that ip and port not found";
 	}
+	
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/activate/{tourneyIndex}")
+	public String activateTournament(@PathVariable int tourneyIndex)
+	{
+	    if (tourneyIndex >= tournaments.size())
+	        return "Not a valid tournament index";
+	    tournaments.get(tourneyIndex).active = true;
+	    return "Tournament " + tourneyIndex + " activated";
+	}
 				
 
 }

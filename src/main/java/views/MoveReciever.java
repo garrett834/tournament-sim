@@ -6,12 +6,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import model.ViewTransitionModelInterface;
+
 
 //when RemoteClientViewer.updateMove() send GET request for move, MoveReciever receives it and give sto moveViewController to update text area
 @RestController
 public class MoveReciever
 {
     public static MoveViewController moveViewController;
+    public static ViewTransitionModelInterface vm;
 
     //receives move update from client viewer and passes to controller to update view
     @ResponseStatus(HttpStatus.OK)
@@ -22,4 +25,10 @@ public class MoveReciever
             moveViewController.updateMove(move);
         return "ok";
     }
-}
+    
+    public static void navigateToTournaments()
+    {
+        if (vm != null)
+            vm.showTournaments();
+    }
+} 

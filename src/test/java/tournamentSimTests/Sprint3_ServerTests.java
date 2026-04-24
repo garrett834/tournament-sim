@@ -94,8 +94,56 @@ class Sprint3_ServerTests
         assertEquals(2, model.tournaments.size());
     }
     
+    //connect() returns false when server not reached
+    @Test
+    void testConnectFailsWithBadServer()
+    {
+        TournamentModel model = new TournamentModel("localhost", String.valueOf(port));
+        boolean result = model.connect("localhost", "9999");
+        assertFalse(result);
+    }
+
+    //connect() returns true when server reached
+    @Test
+    void testConnectSucceeds()
+    {
+        TournamentModel model = new TournamentModel("localhost", String.valueOf(port));
+        boolean result = model.connect("localhost", String.valueOf(port));
+        assertTrue(result);
+    }
+
+    //selectTournament sets selected
+    @Test
+    void testSelectTournamentSetsSelected()
+    {
+        restTemplate.getForObject("/add/tournament", String.class);
+        TournamentModel model = new TournamentModel("localhost", String.valueOf(port));
+        model.connect("localhost", String.valueOf(port));
+        model.selectTournament(model.tournaments.get(0));
+        assertNotNull(model.getSelectedTournament());
+    }
+
+    //unselectTournament clears selectedTournament
+    @Test
+    void testUnselectTournamentClearsSelected()
+    {
+        restTemplate.getForObject("/add/tournament", String.class);
+        TournamentModel model = new TournamentModel("localhost", String.valueOf(port));
+        model.connect("localhost", String.valueOf(port));
+        model.selectTournament(model.tournaments.get(0));
+        model.unselectTournament(model.tournaments.get(0));
+        assertNull(model.getSelectedTournament());
+    }
+
+    //list is empty when connect fails
+    @Test
+    void testListEmptyWhenConnectFails()
+    {
+        TournamentModel model = new TournamentModel("localhost", String.valueOf(port));
+        model.connect("localhost", "9999");
+        assertEquals(0, model.tournaments.size());
+    }
     
-    
-    
+           
 
 }

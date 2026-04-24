@@ -43,7 +43,7 @@
       </VBox>
    </center>
    <bottom>
-      <Button fx:id="exitTourneyButton" mnemonicParsing="false" onAction="#onExitClicked" prefHeight="40.0" prefWidth="120.0" text="Exit Tournament" BorderPane.alignment="CENTER_RIGHT">
+      <Button id="exitTourneyButton" fx:id="exitTourneyButton" mnemonicParsing="false" onAction="#onExitClicked" prefHeight="40.0" prefWidth="120.0" text="Exit Tournament" BorderPane.alignment="CENTER_RIGHT">
          <BorderPane.margin>
             <Insets bottom="20.0" right="20.0" />
          </BorderPane.margin>

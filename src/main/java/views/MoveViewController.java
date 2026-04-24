@@ -1,5 +1,6 @@
 package views;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -43,16 +44,19 @@ public class MoveViewController
 	    		model.unselectTournament(t);
 	    	}
 	    	
-	    	Main.primaryStage.getScene().setRoot(Main.tournamentsView);
+	    	MoveReciever.navigateToTournaments();
 	    	
 	    }
 	    
 	    //called by MoveReciever when update from server
 	    public void updateMove(String move)
 	    {
-	    	liveMoveTextArea.appendText(move + "\n");
+	    	Platform.runLater(() -> {
+	    		liveMoveTextArea.appendText(move + "\n");
+	    	});
+	    	
 	    }
-
+ 
 		/**
 		 * @return the tournamentLabel
 		 */

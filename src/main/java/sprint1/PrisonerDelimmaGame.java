@@ -31,10 +31,10 @@ public class PrisonerDelimmaGame extends Game
 			
 
 	        //try {
-				//Thread.sleep(5000);
+			//	Thread.sleep(5000);
 			//} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
+				//TODO Auto-generated catch block
+			//	e.printStackTrace();
 			//}
 	        
 		}
