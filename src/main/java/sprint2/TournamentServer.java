@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import sprint1.Game;
 import sprint1.HumanRobot;
+import sprint1.MoveLoggingSystem;
 import sprint1.MoveObserver;
 import sprint1.PrisonerDelimmaGame;
 import sprint1.PrisonerOppositeRobot;
 import sprint1.PrisonerSameRobot;
 import sprint1.Robot;
 import sprint1.RoundRobinTournament;
+import sprint1.ScoreLoggingSystem;
 import sprint1.Tournament;
 import sprint3.RemoteClientViewer;
 import sprint4.OvertimeDecorator;
@@ -130,7 +132,11 @@ public class TournamentServer
 	    rrTourney.game = new PrisonerDelimmaGame();
 	    rrTourney.participants.add(new PrisonerSameRobot("SameBot", 0, 0));
 	    rrTourney.participants.add(new PrisonerOppositeRobot("OppositeBot", 0, 0));
-	    tournaments.add(rrTourney); 
+	    tournaments.add(rrTourney);
+	    
+	    rrTourney.game.registerMoveObserver(new MoveLoggingSystem());
+	    rrTourney.game.registerScoreObserver(new ScoreLoggingSystem());
+	    
 	    return "Tournament created at index " + (tournaments.size() - 1);
 	}
 	
