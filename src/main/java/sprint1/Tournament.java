@@ -12,6 +12,7 @@ public abstract class Tournament
 	{
 		return active; 
 	}
+	public boolean completed = false;
 
 	public Tournament() 
 	{
@@ -23,7 +24,11 @@ public abstract class Tournament
 	@Override
 	public String toString() 
 	{
-		if(active)
+		if(completed)
+		{
+			return name + " -" + " Completed";
+		}
+		else if(active)
 		{
 			return name + " -" + " Active";
 		}

@@ -36,12 +36,12 @@ public class PrisonerDelimmaGame extends Game
 		{
 			playRound(p1, p2);
 
-	        //try {
-			//	Thread.sleep(5000);
-			//} catch (InterruptedException e) {
+	        try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
 				//TODO Auto-generated catch block
-			//	e.printStackTrace();
-			//}
+				e.printStackTrace();
+			}
 	        
 		}
 		notifyScoreObserver(p1.name + " " + "scored" + " " + p1.score);

@@ -115,10 +115,12 @@ public class TournamentServer
 		}
 		
 		Robot winner = tournaments.get(tourneyIndex).runTournament();
+		tournaments.get(tourneyIndex).active = false;
+		tournaments.get(tourneyIndex).completed = true;
 		return "Tournament complete. The winner is " + winner.name;
 	}
 	
-	//adds roundrobin tournament with prisoner dilemma games and two robots. 
+	//adds roundrobin tournament with prisoner dilemma games and two robots for demo and such. 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/add/tournament")
 	public String addTournament()
@@ -237,5 +239,4 @@ public class TournamentServer
 		
 	}
 				
-
 }

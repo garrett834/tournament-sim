@@ -135,6 +135,7 @@ public class TournamentModel
             	Tournament t = new RoundRobinTournament();
             	t.name = name;
             	t.active = status.equals("Active");
+            	t.completed = status.equals("Completed");
             	//add to list
             	tournaments.add(t);
             }

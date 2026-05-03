@@ -19,9 +19,21 @@ public class TournamentCellController
         if(t!=null)
         {
         	tourneyLabel.setText(t.toString());
-            viewButton.setDisable(!t.isActive());
+        	if(t.completed)
+        	{
+        		viewButton.setDisable(true);
+        	}
+        	else if(t.active)
+        	{
+        		viewButton.setDisable(false);
+        	}
+        	else
+        	{
+        		viewButton.setDisable(true);
+        	}
+            
         }
-        
+         
     }	
 	
 	@FXML
