@@ -90,9 +90,13 @@ public class Test_MovesView
     @Test
     void testMultipleMoves(FxRobot robot)
     {
-
-        cont.updateMove("RobotA picked Defect");
-        cont.updateMove("RobotB picked Cooperate");
+    	Platform.runLater(() ->
+        cont.updateMove("RobotA picked Defect"));
+        WaitForAsyncUtils.waitForFxEvents();
+        
+        Platform.runLater(() ->
+        cont.updateMove("RobotB picked Cooperate"));
+        WaitForAsyncUtils.waitForFxEvents();
         
         TextArea ta = robot.lookup("#liveMoveTextArea").queryAs(TextArea.class);
         assertTrue(ta.getText().contains("RobotA picked Defect"));

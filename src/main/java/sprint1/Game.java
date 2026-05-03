@@ -5,10 +5,10 @@ import java.util.ArrayList;
 //Abstract game class w/ subject methods and abstract playgame method
 public abstract class Game 
 {
-	ArrayList<ScoreObserver> ScoreObservers;
+	public ArrayList<ScoreObserver> ScoreObservers;
 	public ArrayList<MoveObserver> MoveObservers;
 
-	int gameRounds;
+	public int gameRounds;
 	
 	public Game() {
 		this.ScoreObservers = new ArrayList<>();
@@ -45,6 +45,9 @@ public abstract class Game
 			m.updateMove(moveInfo);
 		}
 	}
+	
+	public abstract void playRound(Robot p1, Robot p2);
+	
 	public abstract Robot playGame(Robot p1, Robot p2);
 	
 

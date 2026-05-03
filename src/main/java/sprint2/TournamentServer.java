@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import sprint1.Game;
 import sprint1.HumanRobot;
 import sprint1.MoveObserver;
 import sprint1.PrisonerDelimmaGame;
@@ -21,6 +22,8 @@ import sprint1.Robot;
 import sprint1.RoundRobinTournament;
 import sprint1.Tournament;
 import sprint3.RemoteClientViewer;
+import sprint4.OvertimeDecorator;
+import sprint4.WinStreakBonusDecorator;
 
 
 @RestController
@@ -125,7 +128,7 @@ public class TournamentServer
 	    rrTourney.game = new PrisonerDelimmaGame();
 	    rrTourney.participants.add(new PrisonerSameRobot("SameBot", 0, 0));
 	    rrTourney.participants.add(new PrisonerOppositeRobot("OppositeBot", 0, 0));
-	    tournaments.add(rrTourney);
+	    tournaments.add(rrTourney); 
 	    return "Tournament created at index " + (tournaments.size() - 1);
 	}
 	
@@ -204,6 +207,34 @@ public class TournamentServer
 	        return "Not a valid tournament index";
 	    tournaments.get(tourneyIndex).active = true;
 	    return "Tournament " + tourneyIndex + " activated";
+	}
+	
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/decorate/{decorator}/{tourneyIndex}")
+	public String addDecorator(@PathVariable String decorator,@PathVariable int tourneyIndex)
+	{
+		if (tourneyIndex >= tournaments.size())
+		{
+			 return "Not a valid tournament index";
+		}
+		//get current game
+		Game curr = tournaments.get(tourneyIndex).game;
+		//if statements to check which decorator
+		if(decorator.equals("winstreak"))
+		{
+			tournaments.get(tourneyIndex).game = new WinStreakBonusDecorator(curr);
+		}
+		else if(decorator.equals("overtime"))
+		{
+			tournaments.get(tourneyIndex).game = new OvertimeDecorator(curr);
+		}
+		else
+		{
+			return "Unknown decorator" + decorator;
+		}
+		
+		return decorator + " was added to tournament at index " + tourneyIndex;
+		
 	}
 				
 

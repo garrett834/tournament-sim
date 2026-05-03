@@ -13,22 +13,28 @@ public class PrisonerDelimmaGame extends Game
 		choices.add("Defect");
 		this.gameRounds = 10;
 	}
+	
+	@Override
+	public void playRound(Robot p1, Robot p2)
+	{
+		String movep1 = p1.makeDecision();
+		String movep2 = p2.makeDecision();
+		notifyMoveObserver(p1.name + " picked " + movep1);
+		notifyMoveObserver(p2.name + " picked " + movep2);
+		
+		pdCalcScore(p1,p2,movep1,movep2);
+		
+		p1.opponentsPrevDecision = movep2;
+		p2.opponentsPrevDecision = movep1;
+		
+	}
 
 	@Override
 	public Robot playGame(Robot p1, Robot p2) 
 	{
 		for(int i = 0;i<gameRounds;i++)
 		{
-			String movep1 = p1.makeDecision();
-			String movep2 = p2.makeDecision();
-			notifyMoveObserver(p1.name + " picked " + movep1);
-			notifyMoveObserver(p2.name + " picked " + movep2);
-			
-			pdCalcScore(p1,p2,movep1,movep2);
-			
-			p1.opponentsPrevDecision = movep2;
-			p2.opponentsPrevDecision = movep1;
-			
+			playRound(p1, p2);
 
 	        //try {
 			//	Thread.sleep(5000);
