@@ -24,6 +24,7 @@ import sprint1.RoundRobinTournament;
 import sprint1.ScoreLoggingSystem;
 import sprint1.Tournament;
 import sprint3.RemoteClientViewer;
+import sprint4.GameDecorator;
 import sprint4.OvertimeDecorator;
 import sprint4.WinStreakBonusDecorator;
 
@@ -34,6 +35,7 @@ public class TournamentServer
 {
 	List<Tournament> tournaments;
 	Map<String, Integer> clients;
+	List<GameDecorator> decorators;
 	
 	public TournamentServer() 
 	{
@@ -243,6 +245,49 @@ public class TournamentServer
 		
 		return decorator + " was added to tournament at index " + tourneyIndex;
 		
+	}
+	
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/undecorate/{decorator}/{tourneyIndex}")
+	public String removeDecorator(@PathVariable String decorator, @PathVariable int tourneyIndex)
+	{
+		if (tourneyIndex >= tournaments.size())
+		{
+			return "Not a valid tournament index";
+		}
+		Game curr = tournaments.get(tourneyIndex).game;
+		//if head matches decorator to be removed, move pointer forward
+		if(matchDec(curr,decorator))
+		{
+			tournaments.get(tourneyIndex).game = ((GameDecorator) curr).getDecGame();
+			return decorator + " removed from tournament " + tourneyIndex;
+		}
+		//traverse chain to find and remove decorator
+		while(curr instanceof GameDecorator)
+		{
+			Game next = ((GameDecorator) curr).getDecGame();
+			if(matchDec(next,decorator))
+			{
+				((GameDecorator) curr).setDecGame(((GameDecorator) next).getDecGame());
+				return decorator + " removed from tournament " + tourneyIndex;
+			}
+			curr = next;
+		}
+		return decorator + " not found in tourney " + tourneyIndex;
+		
+	}
+	//helper for removing decorators so when new decorators added, just need to add conditional here
+	public boolean matchDec(Game game, String decorator)
+	{
+		if(decorator.equals("overtime"))
+		{
+			return game instanceof OvertimeDecorator;
+		}
+		if(decorator.equals("winstreak"))
+		{
+			return game instanceof WinStreakBonusDecorator;
+		}
+		return false;
 	}
 				
 }

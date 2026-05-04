@@ -5,6 +5,7 @@ import sprint1.Robot;
 
 public abstract class GameDecorator extends Game 
 {
+	//reference to next game in chain
 	public Game decGame;
 	
 	public GameDecorator(Game game) 
@@ -26,7 +27,8 @@ public abstract class GameDecorator extends Game
 	{
 		return decGame.playGame(p1,p2);
 	}
-
+	
+	
 	/**
 	 * @return the decGame
 	 */
