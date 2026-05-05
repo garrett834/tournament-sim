@@ -16,6 +16,7 @@ import sprint1.Game;
 import sprint1.HumanRobot;
 import sprint1.MoveLoggingSystem;
 import sprint1.MoveObserver;
+import sprint1.OnlyDefectRobot;
 import sprint1.PrisonerDelimmaGame;
 import sprint1.PrisonerOppositeRobot;
 import sprint1.PrisonerSameRobot;
@@ -288,6 +289,24 @@ public class TournamentServer
 			return game instanceof WinStreakBonusDecorator;
 		}
 		return false;
+	}
+	
+	//just for testing adding and removing OT decorators
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/addTie/tournament")
+	public String addTieTournament()
+	{
+	    RoundRobinTournament rrTourney = new RoundRobinTournament();
+	    rrTourney.name = "RoundRobinTournamentTieTest" + tournaments.size(); 
+	    rrTourney.game = new PrisonerDelimmaGame();
+	    rrTourney.participants.add(new OnlyDefectRobot("Defect1", 0, 0));
+	    rrTourney.participants.add(new OnlyDefectRobot("Defect2", 0, 0));
+	    tournaments.add(rrTourney);
+	    
+	    rrTourney.game.registerMoveObserver(new MoveLoggingSystem());
+	    rrTourney.game.registerScoreObserver(new ScoreLoggingSystem());
+	    
+	    return "Tournament created at index " + (tournaments.size() - 1);
 	}
 				
 }
