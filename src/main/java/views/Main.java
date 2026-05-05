@@ -1,5 +1,7 @@
 package views;
 
+import java.net.InetAddress;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -16,7 +18,16 @@ public class Main extends Application
 	@Override
 	public void start(Stage stage) throws Exception 
 	{
-		TournamentModel model = new TournamentModel("localhost", "8082");
+		String viewerIP;
+		try
+		{
+			viewerIP = InetAddress.getLocalHost().getHostAddress();
+		}
+		catch(Exception e)
+		{
+			viewerIP = "localhost";
+		}
+		TournamentModel model = new TournamentModel(viewerIP, "8082");
 
 	    ViewTransitionModel vm = new ViewTransitionModel(stage, model);
 	    MoveReciever.vm = vm;
