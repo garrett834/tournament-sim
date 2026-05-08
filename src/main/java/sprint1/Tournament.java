@@ -24,7 +24,7 @@ public abstract class Tournament
 	@Override
 	public String toString() 
 	{
-		if(completed)
+		if(completed) 
 		{
 			return name + " -" + " Completed";
 		}

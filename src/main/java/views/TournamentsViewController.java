@@ -65,9 +65,5 @@ public class TournamentsViewController
 	    	vModel.showMoves();
 	    }
 
-	    public void closeTournament(Tournament t) 
-	    {
-	        model.unselectTournament(t);
-	    }
 
 }

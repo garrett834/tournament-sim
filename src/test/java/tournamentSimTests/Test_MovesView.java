@@ -130,4 +130,5 @@ public class Test_MovesView
         assertNotNull(robot.lookup("#exitTourneyButton")
             .queryAs(javafx.scene.control.Button.class));
     }
+    
 }

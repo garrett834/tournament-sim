@@ -116,6 +116,16 @@ class Sprint_2_Test
         String result = restTemplate.getForObject("/start/0", String.class);
         assertTrue(result.contains("winner"));
     }
+     
+    @Test
+    void testArrSaysCompleteAfterTourneyDone()
+    {
+    	restTemplate.getForObject("/add/tournament", String.class);
+    	restTemplate.getForObject("/start/0", String.class);
+    	String tourney = restTemplate.getForObject("/tournaments",String.class);
+    	assertTrue(tourney.contains("Completed"));	
+    }
+    
     //start invalid index should error message
     @Test
     void testStartTournamentInvalidIndex()
