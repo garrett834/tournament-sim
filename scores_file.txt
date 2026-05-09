@@ -275,3 +275,11 @@ SameBot scored 21
 OppositeBot scored 26
 SameBot scored 21
 OppositeBot scored 26
+Defect1 scored 10
+Defect2 scored 10
+Defect1 scored 13
+Defect2 scored 13
+SameBot scored 21
+OppositeBot scored 26
+SameBot scored 21
+OppositeBot scored 26

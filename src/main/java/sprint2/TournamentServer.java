@@ -60,6 +60,8 @@ public class TournamentServer
 	    "<li>/remove/{tourneyIndex} - Remove tournament.</li>" +
 		"<li>/register/human/{name}/{tourneyIndex} - Add human to a tournament.</li>" +
 		"<li>/start/{tourneyIndex} - Start tournament.</li>" +
+		"<li>/decorate/{decorator}/{tourneyIndex} - Add a game modification to tournament games. Current mods are 'overtime' and 'winstreak'." +
+		"<li>/undecorate/{decorator}/{tourneyIndex} - Remove a game modification to tournament games prior to beginning tournament" +
 		"</ol>" +
 		"</body>" +
 		"</html>";	   

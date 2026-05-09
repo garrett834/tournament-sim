@@ -27,6 +27,13 @@ public class WinStreakBonusDecorator extends GameDecorator
 			
 			decGame.playRound(p1, p2);
 			
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				//TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			int p1After = p1.score - p1Before;
 			int p2After = p2.score - p2Before;
 			
@@ -49,6 +56,7 @@ public class WinStreakBonusDecorator extends GameDecorator
 			if(p1Streak == streakNum)
 			{
 				p1.score += bonusNum;
+				notifyMoveObserver(p1.name + " got a win streak bonus!");
 				p1Streak = 0;
 			}
 			
