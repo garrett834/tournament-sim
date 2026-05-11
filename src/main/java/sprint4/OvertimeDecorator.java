@@ -11,10 +11,11 @@ public class OvertimeDecorator extends GameDecorator
 		super(game);
 		// TODO Auto-generated constructor stub
 	}
-
+ 
 	@Override
 	public Robot playGame(Robot p1, Robot p2) 
 	{
+		
 		//run wrapped game first
 		Robot winner = decGame.playGame(p1,p2);
 		
@@ -24,14 +25,16 @@ public class OvertimeDecorator extends GameDecorator
 			
 			for(int i=0;i<otRounds;i++)
 			{
-				decGame.playRound(p1, p2);
-				
+				playRound(p1, p2);
+				/*
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {
 					//TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				*/
+				
 			}
 			
 			notifyScoreObserver(p1.name + " " + "scored" + " " + p1.score);
@@ -59,5 +62,6 @@ public class OvertimeDecorator extends GameDecorator
 		return winner;
 		
 	}
+	
 
 }

@@ -165,6 +165,22 @@ public class Test_TournamentsView
         Assertions.assertThat(!btn.isDisabled());
     }
 	
+	@Test
+	void testViewButtonDisabledWhenComplete(FxRobot robot)
+	{
+	    Platform.runLater(()->{
+	        RoundRobinTournament t = new RoundRobinTournament();
+	        t.name = "RoundRobinTournament0";
+	        t.active = false;
+	        t.completed = true;
+	        model.tournaments.add(t);
+	    });
+	    WaitForAsyncUtils.waitForFxEvents();
+
+	    Button btn = robot.lookup("#viewMovesButton").queryAs(Button.class);
+	    Assertions.assertThat(btn.isDisabled());
+	}
+	
 	//pressing connect fills listview
 	@Test
 	void testConnectButton(FxRobot robot)

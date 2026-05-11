@@ -187,7 +187,7 @@ class Sprint_2_Test
         //System.setIn tells java to look at in variable instead of user input for testing
         System.setIn(in);
 
-        HumanRobot human = new HumanRobot("Test");
+        HumanRobot human = new HumanRobot("test");
         String decision = human.makeDecision();
         assertEquals("Defect", decision);
     }
@@ -198,7 +198,7 @@ class Sprint_2_Test
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        HumanRobot human = new HumanRobot("Tester");
+        HumanRobot human = new HumanRobot("test");
         String decision = human.makeDecision();
 
         assertEquals("Cooperate", decision);
@@ -211,7 +211,7 @@ class Sprint_2_Test
         InputStream in = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(in);
 
-        HumanRobot human = new HumanRobot("Test");
+        HumanRobot human = new HumanRobot("test");
         //set prev. decision to defect
         human.opponentsPrevDecision = "Defect";
 
@@ -235,6 +235,8 @@ class Sprint_2_Test
             "<li>/remove/{tourneyIndex} - Remove tournament.</li>" +
             "<li>/register/human/{name}/{tourneyIndex} - Add human to a tournament.</li>" +
             "<li>/start/{tourneyIndex} - Start tournament.</li>" +
+            "<li>/decorate/{decorator}/{tourneyIndex} - Add a game modification to tournament games. Current mods are 'overtime' and 'winstreak'." +
+    		"<li>/undecorate/{decorator}/{tourneyIndex} - Remove a game modification to tournament games." +
             "</ol>" +
             "</body>" +
             "</html>";

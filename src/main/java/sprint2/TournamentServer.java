@@ -61,7 +61,7 @@ public class TournamentServer
 		"<li>/register/human/{name}/{tourneyIndex} - Add human to a tournament.</li>" +
 		"<li>/start/{tourneyIndex} - Start tournament.</li>" +
 		"<li>/decorate/{decorator}/{tourneyIndex} - Add a game modification to tournament games. Current mods are 'overtime' and 'winstreak'." +
-		"<li>/undecorate/{decorator}/{tourneyIndex} - Remove a game modification to tournament games prior to beginning tournament" +
+		"<li>/undecorate/{decorator}/{tourneyIndex} - Remove a game modification to tournament games." +
 		"</ol>" +
 		"</body>" +
 		"</html>";	   
@@ -235,7 +235,18 @@ public class TournamentServer
 		//if statements to check which decorator
 		if(decorator.equals("winstreak"))
 		{
-			tournaments.get(tourneyIndex).game = new WinStreakBonusDecorator(curr);
+			if (curr instanceof OvertimeDecorator) 
+			{
+		        Game inner = ((OvertimeDecorator) curr).getDecGame();
+		        WinStreakBonusDecorator ws = new WinStreakBonusDecorator(inner);
+		        ws.MoveObservers = curr.MoveObservers;
+		        ws.ScoreObservers = curr.ScoreObservers;		        		        		        		
+		        ((OvertimeDecorator) curr).setDecGame(ws);
+		    }
+			else
+			{
+			    tournaments.get(tourneyIndex).game = new WinStreakBonusDecorator(curr);
+			}
 		}
 		else if(decorator.equals("overtime"))
 		{
@@ -293,7 +304,7 @@ public class TournamentServer
 		return false;
 	}
 	
-	//just for testing adding and removing OT decorators
+	//just for ot decorator
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/addTie/tournament")
 	public String addTieTournament()
@@ -310,5 +321,45 @@ public class TournamentServer
 	    
 	    return "Tournament created at index " + (tournaments.size() - 1);
 	}
+	
+	//just for dec stacking demo
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/addDemo/tournament")
+	public String addDemoTournament()
+	{
+		RoundRobinTournament rrTourney = new RoundRobinTournament();
+		rrTourney.name = "RoundRobinTournamentDemo" + tournaments.size(); 
+		rrTourney.game = new PrisonerDelimmaGame();
+		rrTourney.participants.add(new OnlyDefectRobot("Defect1", 0, 0));
+	    rrTourney.participants.add(new OnlyDefectRobot("Defect2", 0, 0));
+	    rrTourney.participants.add(new PrisonerOppositeRobot("Opp1",0,0));
+	    tournaments.add(rrTourney);
+		
+	    rrTourney.game.registerMoveObserver(new MoveLoggingSystem());
+	    rrTourney.game.registerScoreObserver(new ScoreLoggingSystem());
+		    
+		return "Tournament created at index " + (tournaments.size() - 1);
+	}
+	
+	//just for winstreak decorator demo
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/addWS/tournament")
+	public String addWSTournament()
+	{
+		RoundRobinTournament rrTourney = new RoundRobinTournament();
+	    rrTourney.name = "RoundRobinTournamentWSTest" + tournaments.size(); 
+	    rrTourney.game = new PrisonerDelimmaGame();
+	    rrTourney.participants.add(new OnlyDefectRobot("Defect1", 0, 0));
+	    rrTourney.participants.add(new PrisonerOppositeRobot("Opp1", 0, 0));
+	    tournaments.add(rrTourney);
+		    
+	    rrTourney.game.registerMoveObserver(new MoveLoggingSystem());
+	    rrTourney.game.registerScoreObserver(new ScoreLoggingSystem());
+		    
+	    return "Tournament created at index " + (tournaments.size() - 1);
+	}
+	
+	
+	
 				
 }

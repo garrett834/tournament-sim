@@ -304,4 +304,11 @@ class Tourney_Sim_Test
 	        assertTrue(p1.score > p2.score);
 	    }
 	    
+	    @Test
+	    void testIsActiveFalseBeforeStarting()
+	    {
+	        RoundRobinTournament t = new RoundRobinTournament();
+	        assertFalse(t.isActive());
+	    }
+	    
 }

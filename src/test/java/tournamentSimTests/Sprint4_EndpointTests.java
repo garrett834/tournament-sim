@@ -190,14 +190,14 @@ class Sprint4_EndpointTests
     }
     
     @Test
-    void testRemoveOTDecInMiddleOfChain() throws IOException
+    void testRemoveOTDecMiddleOfChain() throws IOException
     {
     	//clear file contents
     	new FileWriter("move_file.txt",false).close();
     	
     	restTemplate.getForObject("/addTie/tournament", String.class);
-    	restTemplate.getForObject("/decorate/winstreak/0",String.class);
     	restTemplate.getForObject("/decorate/overtime/0",String.class);
+    	restTemplate.getForObject("/decorate/winstreak/0",String.class);
     	restTemplate.getForObject("/undecorate/overtime/0",String.class);
     	restTemplate.getForObject("/start/0", String.class);
     	
@@ -220,6 +220,61 @@ class Sprint4_EndpointTests
 
         assertFalse(found);	
     	
+    }
+    
+    @Test
+    void testRemoveDecEndOfChain() throws IOException
+    {
+    	new FileWriter("move_file.txt",false).close();
+    	
+    	restTemplate.getForObject("/addTie/tournament", String.class);
+    	restTemplate.getForObject("/decorate/winstreak/0",String.class);
+    	restTemplate.getForObject("/decorate/overtime/0",String.class);
+    	restTemplate.getForObject("/undecorate/winstreak/0",String.class);
+    	restTemplate.getForObject("/start/0", String.class);
+    	
+    	File file = new File("move_file.txt");
+        Scanner scanner = new Scanner(file);
+
+        boolean found = false;
+
+        //overtime starting should not be in file
+        while(scanner.hasNextLine())
+        {
+            if(scanner.nextLine().contains("bonus"))
+            {
+                found = true;
+                break;
+            }
+        }
+
+        scanner.close();
+
+        assertFalse(found);	
+ 	
+    }
+    
+    @Test
+    void testAddDemoTourney()
+    {
+        String result = restTemplate.getForObject("/addDemo/tournament", String.class);
+        assertTrue(result.contains("Tournament created at"));
+    }
+    
+    @Test
+    void testAddWSTourney()
+    {
+        String result = restTemplate.getForObject("/addWS/tournament", String.class);
+        assertTrue(result.contains("Tournament created at"));
+    }
+    
+    @Test
+    void testRemoveInvalidDec()
+    {     
+        restTemplate.getForObject("/add/tournament", String.class);
+        restTemplate.getForObject("/decorate/winstreak/0", String.class);
+        String result = restTemplate.getForObject("/undecorate/jghj/0", String.class);
+        assertTrue(result.contains("not found"));
     }
 
     
